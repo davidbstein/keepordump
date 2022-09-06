@@ -5,16 +5,27 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="data:;base64,=" />
+  <link rel="stylesheet" type="text/css" href="reset.css" />
   <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
-  <a href="/"> reset game </a>
+  <a id='reset-button' href="/"> reset game </a>
   <div id="game">loading...</div>
   <script src="game.js" type="text/javascript"></script>
   <script type="text/javascript">
   async function start(){
-    const ret = await fetch("https://script.google.com/macros/s/AKfycbxF6iJF70zNisiP1KQTfefmxt_ral7SzmfMkL_Pz80P8u24vrJ_M6wm4elHPvex-KgF/exec")
-    window._ANSWER_KEY = JSON.parse(await ret.text());
+    if (window.location.hash.length > 1)
+      if (window.localStorage._ANSWER_KEY){
+        console.log("loading data from cache");
+        try{
+          window._ANSWER_KEY = JSON.parse(window.localStorage._ANSWER_KEY);
+        } catch (e) {}
+      }
+    if (!window._ANSWER_KEY) {
+      const ret = await fetch("https://script.google.com/macros/s/AKfycbxF6iJF70zNisiP1KQTfefmxt_ral7SzmfMkL_Pz80P8u24vrJ_M6wm4elHPvex-KgF/exec")
+      window._ANSWER_KEY = JSON.parse(await ret.text());
+      window.localStorage._ANSWER_KEY = JSON.stringify(window._ANSWER_KEY);
+    }
     runGame();
   };
   start();

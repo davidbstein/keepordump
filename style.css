@@ -1,5 +1,5 @@
-body {
-  font-family: sans-serif; margin: 0; padding: 0;
+html, body {
+  font-family: sans-serif; margin: 0; padding: 0; height: 100%;
 }
 div, span {
   margin: 0; padding: 0;
@@ -7,13 +7,72 @@ div, span {
 
 #game {
   height:  100%;
-  min-height: 100vh;
+  overflow: hidden;
   position: relative;
-  margin-bottom: 2em;
-}
-#game > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  gap: 1em;
   padding: 1em;
 }
+
+#game #action_instruction {
+  border-bottom: .1em solid;
+  font-size: 3em;
+  text-align: center;
+  font-weight: bold;
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  display: flex;
+  min-height: 2em;
+  align-items: center;
+  justify-content: center;
+}
+
+
+#game #round {
+  font-size: 2em;
+  text-align: right;
+  white-space: pre-wrap;
+  position: absolute;
+  right: .5em;
+  top: .5em;
+}
+
+#reset-button {
+  position: absolute;
+  top: .5em;
+  left: .5em;
+  z-index: 1;
+}
+
+
+#controls {
+  display:  flex;
+  flex-wrap:  wrap;
+  gap: 1em;
+  justify-content: center;
+  align-items: center;
+}
+
+.return-button {
+  border: 1px solid;
+  border-radius: .5em;
+  font-weight: bold;
+  padding: .5em;
+}
+.return-button:hover {
+  cursor: pointer;
+  box-shadow: 1px 1px 1px 1px solid #ccc;
+}
+
+
+
+
+
+
 
 #pick_topic {
   display:  flex;
@@ -21,7 +80,8 @@ div, span {
   gap: 1em;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  flex-grow: 2;
+  width: 100%;
 }
 
 .topic_opt.burned {
@@ -32,11 +92,11 @@ div, span {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 4em;
+  height: 35%;
   font-size: 2em;
   border: 1px solid;
   border-radius: 1em;
-  width: 12em;
+  width: 30%;
 }
 .topic_opt.has-image {
   background-size: contain;
@@ -54,6 +114,10 @@ div, span {
 }
 
 
+
+
+
+
 #board {
   display:  flex;
   flex-wrap:  wrap;
@@ -64,6 +128,7 @@ div, span {
   padding: 2em;
   border: 1px solid;
   background: #ddf;
+  width: 90%;
 }
 
 .board_opt.dropped {
@@ -75,11 +140,22 @@ div, span {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 4em;
+  height: 30%;
   font-size: 2em;
   border: 1px solid;
-  min-width: 8em;
+  width: 18%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -120,6 +196,13 @@ div, span {
 }
 
 
+
+
+
+
+
+
+
 #keep-choice {
   display:  flex;
   flex-wrap:  wrap;
@@ -133,6 +216,14 @@ div, span {
   text-align: center;
   padding: 1em;
   font-size: 3em;
+}
+#burn-button {
+  flex-basis: 100%;
+  display: flex;
+  font-size: .75em;
+  justify-content: center;
+  align-items: center;
+  color: red;
 }
 
 .KoD-button {
@@ -152,22 +243,3 @@ div, span {
   box-shadow: 2px 2px 2px 2px black;
 }
 
-
-#controls {
-  display:  flex;
-  flex-wrap:  wrap;
-  gap: 1em;
-  justify-content: center;
-  align-items: center;
-}
-
-.return-button {
-  border: 1px solid;
-  border-radius: .5em;
-  font-weight: bold;
-  padding: .5em;
-}
-.return-button:hover {
-  cursor: pointer;
-  box-shadow: 1px 1px 1px 1px solid #ccc;
-}

@@ -115,6 +115,11 @@ function get_board() {
   return options.map((opt, idx) => ({dropped: (dropped.indexOf(idx) >= 0), ...opt}))
 }
 
+function blank_board() {
+  const {dropped=[]} = getState();
+  return Array.from(Array(15).keys()).map((e, idx)=> ({dropped: (dropped.indexOf(idx) >= 0), text:""}))
+}
+
 function pickTopic(topicIdx) {
   console.log(`PICKING TOPIC: ${topicIdx}`)
   state = getState();
@@ -165,10 +170,27 @@ function pickKeepOrDrop(keep_or_drop){
   runGame();
 }
 
+function burnCurrentQuestion() {
+  console.log(`PICKING KEEP OR DROP: ${keep_or_drop}`)
+  const state = getState();
+  const {t: topicIdx, q: questionIdx, dropped=[]} = state
+  burnQuestion(topicIdx, questionIdx);
+  incrementBurnCounter();
+  pickTopic(topicIdx);
+}
+
 function incrementRound() {
   const state = getState();
   state.round = state.round || 1;
   state.round++;
+  saveState(state);
+}
+
+
+function incrementBurnCounter() {
+  const state = getState();
+  state.burn_count = state.burn_count || 0;
+  state.burn_count++;
   saveState(state);
 }
 
@@ -179,6 +201,30 @@ function burnQuestion(topicIdx, questionIdx) {
   if (!state.burned_q[topicIdx]) state.burned_q[topicIdx] = [];
   state.burned_q[topicIdx].push(questionIdx);
   saveState(state);
+}
+
+
+
+/**
+ * ----------------------------------
+ *          RENDER LOGIC
+ * ----------------------------------
+ */
+
+
+
+function draw_action(action) {
+  const to_draw = [
+    `<div id="action_instruction"> ${action} </div>`
+  ]
+  document.querySelector("#game").innerHTML += to_draw.join('');
+}
+
+function reset_screen(){
+  const round = getState().round || 1;
+  const burn_count = getState().burn_count || 0;
+  const dropped_count = (getState().dropped || []).length;
+  document.querySelector("#game").innerHTML = `<div id="round">round ${round}${burn_count ? `\n${burn_count} burned question${burn_count>1?'s':''}` : ''}</div>`;
 }
 
 function draw_board(board){
@@ -193,15 +239,9 @@ function draw_board(board){
   return board.map(({dropped, text, url}) => dropped ? "[dropped]" : `${text}(${url})`)
 }
 
-function reset_screen(){
-  const round = getState().round || 1;
-  const dropped = (getState().dropped || []).length;
-  document.querySelector("#game").innerHTML = `<div id="round">round ${round}, lost tiles ${dropped}</div>`;
-}
-
 function draw_pick_topic(topics){
   const to_draw = [
-    `<div id="pick_topic">`,
+    `<div id="pick_topic" class="action-container">`,
     ...topics.map(({burned, text, url}, idx) => {
       if (burned) return `<div class='burned topic_opt'>${text}</div>`
       return `<div class='topic_opt ${url ? 'has-image' :''}' style="background-image: url('${url}')" onclick="pickTopic(${idx});"><div>${text}</div></div>`
@@ -213,7 +253,7 @@ function draw_pick_topic(topics){
 
 function draw_pick_question(questions){
   const to_draw = [
-    `<div id="pick_question">`,
+    `<div id="pick_question" class="action-container">`,
     ...questions.map(({burned, text, url}, idx) => {
       if (burned) return `<div class='burned question_opt' style="background-image: url('${url}')"><div>Question ${idx+1}</div></div>`
       return `<div class='question_opt' style="background-image: url('${url}')" onclick="pickQuestion(${idx});"><div>Question ${idx+1}</div></div>`
@@ -227,52 +267,54 @@ function draw_pick_question(questions){
 
 function draw_keep_or_drop(question){
   const to_draw = [
-    `<div id="keep_or_drop">`,
+    `<div id="keep_or_drop" class="action-container">`,
       `<div id='keep-question'>${question.text}</div>`,
       `<div id='keep-choice'>`,
         `<div id='keep-button' class='KoD-button' onclick='pickKeepOrDrop(true);'>keep</div>`,
         `<div id='drop-button' class='KoD-button' onclick='pickKeepOrDrop(false);'>drop</div>`,
+        `<div id='burn-button'> <div class='KoD-button' onclick='burnCurrentQuestion();'>burn question</div></div>`,
       `</div>`,
+
     `</div>`
   ]
   document.querySelector("#game").innerHTML += to_draw.join('');
 }
 
+
+/**
+ * ----------------------------------
+ *             GAME LOGIC
+ * ----------------------------------
+ */
 function runGame(){
   window.setTimeout(_runGame, 0);
 }
 
 function _runGame() {
-  console.log("~~~~\n\n\n~~~~\nrunning game!")
   const state = getState();
-  console.log("STATE:", state);
   reset_screen();
   const {t, q, burned_q, burned_t, dropped, round} = getState();
   if (!is_defined(t)) {
-    console.log("ACTION: pick a topic!");
-    const topics = get_topics()
-    console.log(topics.map((topic)=>topic.burned?"burned":topic.text));
-    draw_pick_topic(topics);
+    draw_action("pick a topic");
+    draw_pick_topic(get_topics());
+    draw_board(blank_board());
     return;
   }
-  const board = get_board();
-  console.log("BOARD:", draw_board(board));
   if (!is_defined(q)) {
-    console.log(`current topic: ${t}`)
-    console.log("ACTION: pick question!");
+    draw_action("pick a question");
     const questions = get_questions(t);
     if (questions.filter((q)=>{return !q.burned}).length == 0) {
       closeTopic();
       return
     }
     draw_pick_question(questions);
+    draw_board(get_board());
     return;
   }
 
-  const question = get_questions(t)[q];
-  console.log(`current question: ${question.text}`)
-  console.log("ACTION: keep or drop?")
-  draw_keep_or_drop(question);
+  draw_action("keep or drop?");
+  draw_keep_or_drop(get_questions(t)[q]);
+  draw_board(get_board());
 }
 
 function testGame(){
