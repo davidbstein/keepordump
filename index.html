@@ -6,14 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="data:;base64,=" />
   <link rel="stylesheet" type="text/css" href="style.css" />
-  <script type="text/javascript">
-const _ANSWER_KEY = [{"questions":[{"text":"Is a letter","answers":["yes","yes","no","no","no","yes","yes","yes","yes","yes","yes","no","no","no","no"]},{"text":"is a number","answers":["no","no","yes","yes","yes","no","no","no","no","no","no","yes","yes","yes","no"]},{"text":"Contains Curves","answers":["no","yes","no","yes","yes","yes","yes","no","yes","yes","yes","yes","yes","yes","no"]},{"text":"Contains a straight edge","answers":["yes","yes","yes","yes","no","no","yes","yes","yes","yes","yes","no","no","no","yes"]}],"options":[{"text":"A","url":"http://example.com/a.jpg"},{"text":"B","url":""},{"text":1,"url":""},{"text":2,"url":""},{"text":3,"url":""},{"text":"C","url":""},{"text":"D","url":""},{"text":"E","url":""},{"text":"f","url":""},{"text":"g","url":""},{"text":"h","url":""},{"text":80,"url":""},{"text":933,"url":""},{"text":0,"url":""},{"text":"##","url":""}],"topic":{"text":"EXAMPLE","url":"https://t3.ftcdn.net/jpg/00/92/53/56/240_F_92535664_IvFsQeHjBzfE6sD4VHdO8u5OHUSc6yHF.jpg"}},{"questions":[{"text":"Elements that don't have the same first letter as their elemental symbol","answers":["yes","no","no","yes","yes","yes","no","yes","no","yes","yes","yes","yes","no","no"]}],"options":[{"text":"antimony","url":""},{"text":"carbon","url":""},{"text":"copper","url":""},{"text":"gold","url":""},{"text":"iron","url":""},{"text":"lead","url":""},{"text":"magnesium","url":""},{"text":"mercury","url":""},{"text":"neon","url":""},{"text":"potassium","url":""},{"text":"silver","url":""},{"text":"sodium","url":""},{"text":"tin","url":""},{"text":"silicon","url":""},{"text":"sulfer","url":""}],"topic":{"text":"SCIENCE!","url":"https://img.freepik.com/free-vector/colourful-science-work-concept_23-2148539571.jpg?w=1060&t=st=1662485263~exp=1662485863~hmac=6eea19170968329c948a0f1d1c281325fff5da0f942e44cace6657d29a9a5bf4"}},{"questions":[{"text":"Is a letter","answers":["yes","yes","no","no","no","yes","yes","yes","yes","yes","yes","no","no","no","no"]},{"text":"is a number","answers":["no","no","yes","yes","yes","no","no","no","no","no","no","yes","yes","yes","no"]},{"text":"Contains Curves","answers":["no","yes","no","yes","yes","yes","yes","no","yes","yes","yes","yes","yes","yes","no"]},{"text":"Contains a straight edge","answers":["yes","yes","yes","yes","no","no","yes","yes","yes","yes","yes","no","no","no","yes"]}],"options":[{"text":"A","url":"http://example.com/a.jpg"},{"text":"B","url":""},{"text":1,"url":""},{"text":2,"url":""},{"text":3,"url":""},{"text":"C","url":""},{"text":"D","url":""},{"text":"E","url":""},{"text":"f","url":""},{"text":"g","url":""},{"text":"h","url":""},{"text":80,"url":""},{"text":933,"url":""},{"text":0,"url":""},{"text":"##","url":""}],"topic":{"text":"EXAMPLE","url":"https://t3.ftcdn.net/jpg/00/92/53/56/240_F_92535664_IvFsQeHjBzfE6sD4VHdO8u5OHUSc6yHF.jpg"}},{"questions":[{"text":"Elements that don't have the same first letter as their elemental symbol","answers":["yes","no","no","yes","yes","yes","no","yes","no","yes","yes","yes","yes","no","no"]}],"options":[{"text":"antimony","url":""},{"text":"carbon","url":""},{"text":"copper","url":""},{"text":"gold","url":""},{"text":"iron","url":""},{"text":"lead","url":""},{"text":"magnesium","url":""},{"text":"mercury","url":""},{"text":"neon","url":""},{"text":"potassium","url":""},{"text":"silver","url":""},{"text":"sodium","url":""},{"text":"tin","url":""},{"text":"silicon","url":""},{"text":"sulfer","url":""}],"topic":{"text":"SCIENCE!","url":"https://img.freepik.com/free-vector/colourful-science-work-concept_23-2148539571.jpg?w=1060&t=st=1662485263~exp=1662485863~hmac=6eea19170968329c948a0f1d1c281325fff5da0f942e44cace6657d29a9a5bf4"}}];
-
-  </script>
 </head>
 <body>
-  <div id="game">error :(</div>
-  <script src="game.js" type="text/javascript"></script>
   <a href="/"> reset game </a>
+  <div id="game">loading...</div>
+  <script src="game.js" type="text/javascript"></script>
+  <script type="text/javascript">
+  async function start(){
+    const ret = await fetch("https://script.google.com/macros/s/AKfycbxF6iJF70zNisiP1KQTfefmxt_ral7SzmfMkL_Pz80P8u24vrJ_M6wm4elHPvex-KgF/exec")
+    window._ANSWER_KEY = JSON.parse(await ret.text());
+    runGame();
+  };
+  start();
+  </script>
 </body>
 </html>

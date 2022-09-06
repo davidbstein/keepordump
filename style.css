@@ -38,7 +38,12 @@ div, span {
   border-radius: 1em;
   width: 12em;
 }
-
+.topic_opt.has-image {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  align-items: end;
+}
 .topic_opt:hover {
   cursor: pointer;
   box-shadow: 2px 2px 2px 2px black;
