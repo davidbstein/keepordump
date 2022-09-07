@@ -277,4 +277,5 @@ div, span {
 }
 #reset-link:hover {
   background: #f88;
+  cursor:  pointer;
 }
