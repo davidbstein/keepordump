@@ -1,6 +1,6 @@
 html, body {
   font-family: sans-serif; margin: 0; padding: 0; height: 100%;
-  font-size: min(2vh, 2vw);
+  font-size: max(12px, min(12px, 1vh, 1vw));
 }
 div, span {
   margin: 0; padding: 0;
