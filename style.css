@@ -1,6 +1,6 @@
 html, body {
   font-family: sans-serif; margin: 0; padding: 0; height: 100%;
-  font-size: max(12px, min(12px, 1vh, 1vw));
+  font-size: min(1.5vw, 1.5vh);
 }
 div, span {
   margin: 0; padding: 0;
@@ -140,11 +140,16 @@ div, span {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1em;
+  font-size: 1.5em;
   border: 1px solid;
   overflow: hidden;
   text-overflow: ellipsis;
   text-shadow: 0px 0px 1em white, 0px 0px 1em white, 0px 0px 1em white, 0px 0px 1em white;
+
+  -webkit-transition: all 0.2s ease-out;
+  -moz-transition: all 0.2s ease-out;
+  -o-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
 }
 .board_opt.has-image {
   background-size: cover;
@@ -220,7 +225,6 @@ div, span {
 
 #keep-question {
   text-align: center;
-  padding: 1em;
   font-size: 3em;
 }
 #burn-button {
@@ -231,7 +235,9 @@ div, span {
   align-items: center;
   color: red;
 }
-
+#burn-button .KoD-button {
+  height: 2em;
+}
 .KoD-button {
   text-align: center;
   display: flex;
@@ -249,3 +255,26 @@ div, span {
   box-shadow: 2px 2px 2px 2px black;
 }
 
+
+
+#game_over {
+  text-align: center;
+}
+#game-over-message {
+  font-size: 4em;
+}
+#game-over-round b {
+  font-size: 1.4em;
+  font-family: monospace;
+  color: green;
+}
+#reset-link {
+  border: .1em solid red;
+  background: #fcc;
+  font-weight: bold;
+  text-decoration: none;
+  margin-top: 1em;
+}
+#reset-link:hover {
+  background: #f88;
+}

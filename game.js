@@ -155,19 +155,21 @@ function pickKeepOrDrop(keep_or_drop){
   const answers = _ANSWER_KEY[topicIdx].questions[questionIdx].answers;
   to_drop = [];
   for (let idx in answers) {
-    if (dropped.indexOf(parseInt(idx)) >= 0) to_drop.push(idx);
+    if (dropped.indexOf(parseInt(idx)) >= 0) continue; //to_drop.push(idx);
     else if (answers[idx] === 'no' && keep_or_drop) to_drop.push(idx);
     else if (answers[idx] === 'yes' && !keep_or_drop) to_drop.push(idx);
   }
-  state.dropped = to_drop;
+  dropped.push(...to_drop)
+  state.dropped = dropped;
   state.q = undefined;
   saveState(state);
   burnQuestion(topicIdx, questionIdx);
   incrementRound();
-  if (state?.dropped?.length == 15) {
-    alert("out of options. game over. There's a reset button at the bottom.");
+  _delay = 300;
+  for (let i in to_drop){
+    setTimeout(()=>{document.querySelectorAll(".board_opt")[to_drop[i]].classList.add("dropped");}, _delay * i);
   }
-  runGame();
+  setTimeout(runGame, to_drop.length * _delay + 250)
 }
 
 function burnCurrentQuestion() {
@@ -221,10 +223,14 @@ function draw_action(action) {
 }
 
 function reset_screen(){
+  document.querySelector("#game").innerHTML = ``;
+}
+
+function draw_current_score(){
   const round = getState().round || 1;
   const burn_count = getState().burn_count || 0;
   const dropped_count = (getState().dropped || []).length;
-  document.querySelector("#game").innerHTML = `<div id="round">round ${round}${burn_count ? `\n${burn_count} burned question${burn_count>1?'s':''}` : ''}</div>`;
+  document.querySelector("#game").innerHTML += `<div id="round">round ${round}${burn_count ? `\n${burn_count} burned question${burn_count>1?'s':''}` : ''}</div>`;
 }
 
 function draw_board(board){
@@ -281,6 +287,21 @@ function draw_keep_or_drop(question){
 }
 
 
+function draw_game_over(){
+  const state = getState();
+  const round = getState().round || 1;
+  const burn_count = getState().burn_count || 0;
+  const to_draw = [
+  `<div id="game_over">`,
+  `<div id="game-over-message"> game over </div>`,
+  `<div id="game-over-round"> you made it to round: <b>${round} </b></div>`,
+  `<div id="game-over-burns"> you burned ${burn_count} question${burn_count==1?'':'s'} </div>`,
+  `<div id="reset-link" onclick="saveState({});runGame();"> New Game </div>`,
+  `</div>`
+  ]
+  document.querySelector("#game").innerHTML += to_draw.join('');
+}
+
 /**
  * ----------------------------------
  *             GAME LOGIC
@@ -293,6 +314,11 @@ function runGame(){
 function _runGame() {
   const state = getState();
   reset_screen();
+  if (state?.dropped?.length == 15) {
+    draw_game_over();
+    return;
+  }
+  draw_current_score();
   const {t, q, burned_q, burned_t, dropped, round} = getState();
   if (!is_defined(t)) {
     draw_action("pick a topic");
