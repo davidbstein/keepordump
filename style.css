@@ -146,8 +146,15 @@ div, span {
   width: 18%;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-shadow: 0px 0px .5em white;
 }
-
+.board_opt.has-image {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  align-items: end;
+  
+}
 
 
 
